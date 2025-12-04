@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            
+            // developer columns
+            $table->string('profile_path')->nullable();
+            $table->string('bio',100)->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

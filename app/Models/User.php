@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_path',
+        'bio',
     ];
 
     /**
@@ -44,5 +46,28 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    // 🔹 پروژه‌هایی که مالکشون این یوزره (projects.owner_id = users.id)
+    public function ownedProjects()
+    {
+        return $this->hasMany(Project::class, 'owner_id');
+    }
+
+    // 🔹 پروژه‌هایی که این کاربر توشون عضو هست (pivot table: project_user)
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class)->withTimestamps();
+    }
+
+    // 🔹 تسک‌هایی که به عنوان "مالک / انجام‌دهنده یا شخصی" به این یوزر نسبت داده شده (tasks.user_id)
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    // 🔹 تسک‌هایی که این یوزر ساخته (tasks.created_by_id)
+    public function createdTasks()
+    {
+        return $this->hasMany(Task::class, 'created_by_id');
     }
 }

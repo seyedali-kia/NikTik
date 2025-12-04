@@ -2,64 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\task;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+    // فرم ساخت پروژه (اگر از Inertia استفاده می‌کنی، می‌تونی از این هم استفاده کنی)
     public function create()
     {
-        //
+        return inertia('tasks/Create');
+    }
+    // ۱) ساخت تسک شخصی (مختص یک فرد)
+    public function storePersonal(Request $request)
+    {
+        $user = $request->user();
+
+        $allowedEstimations = [1, 3, 5, 8, 13];
+
+        $data = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'estimation'  => ['nullable', 'integer', Rule::in($allowedEstimations)],
+        ]);
+
+        Task::create([
+            'project_id'    => null,          // شخصی
+            'user_id'       => $user->id,     // صاحب تسک
+            'created_by_id' => $user->id,     // سازنده تسک
+            'title'         => $data['title'],
+            'description'   => $data['description'] ?? null,
+            'estimation'    => $data['estimation'] ?? null,
+            'status'        => 'todo',
+        ]);
+
+        return redirect()->route('dashboard');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // ۲) ساخت تسک برای یک پروژه
+    public function storeForProject(Request $request, Project $project)
     {
-        //
+        $user = $request->user();
+
+        // فقط اعضای پروژه اجازه ساخت تسک دارند
+        if (! $project->users->contains($user->id)) {
+            abort(403);
+        }
+
+        $allowedEstimations = [1, 3, 5, 8, 13];
+
+        $data = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'estimation'  => ['required', 'integer', Rule::in($allowedEstimations)],
+        ]);
+
+        Task::create([
+            'project_id'    => $project->id,  // تسک پروژه‌ای
+            'user_id'       => null,          // تا انجام نشده، به فرد خاصی نسبت داده نمی‌شود
+            'created_by_id' => $user->id,     // هر کسی ساخته را نگه می‌داریم
+            'title'         => $data['title'],
+            'description'   => $data['description'] ?? null,
+            'estimation'    => $data['estimation'],
+            'status'        => 'todo',
+        ]);
+
+        return redirect()->route('dashboard');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(task $task)
+    // ۳) انجام دادن تسک پروژه‌ای و نسبت دادن به فرد
+    public function markDone(Request $request, Task $task)
     {
-        //
-    }
+        $user = $request->user();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(task $task)
-    {
-        //
-    }
+        // باید تسک پروژه‌ای باشد (نه شخصی)
+        if (is_null($task->project_id)) {
+            abort(400, 'این تسک پروژه‌ای نیست.');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, task $task)
-    {
-        //
-    }
+        // کاربر باید عضو پروژه باشد
+        if (! $task->project->users->contains($user->id)) {
+            abort(403);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(task $task)
-    {
-        //
+        if ($task->status === 'done') {
+            return redirect()->route('dashboard');
+        }
+
+        $task->update([
+            'status'  => 'done',
+            'done_at' => now(),
+            'user_id' => $user->id, // اینجا تسک به کسی که انجامش داده نسبت داده می‌شود
+        ]);
+
+        return redirect()->route('dashboard');
     }
+    
 }
