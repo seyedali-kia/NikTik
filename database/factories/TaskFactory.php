@@ -22,6 +22,8 @@ class TaskFactory extends Factory
             'description' => fake()->paragraph(),
             'estimation' => collect([1, 3, 5, 8, 13])->random(),
             'status' => collect(['todo', 'doing', 'done'])->random(),
+            'created_at' => fake()->dateTimeBetween('-7 month', '-3 month'),
+            'updated_at' => fake()->dateTimeBetween('-3 month', 'now'),
         ];
     }
 }
