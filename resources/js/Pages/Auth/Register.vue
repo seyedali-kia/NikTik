@@ -25,15 +25,19 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
+            <h1
+                class="text-xl font-semibold leading-tight text-gray-800 text-center mb-4"
+            >
+                ثبت نام در نیک تیک!
+            </h1>
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="نام کاربری" />
 
                 <TextInput
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-                    required
                     autofocus
                     autocomplete="name"
                 />
@@ -42,14 +46,13 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="ایمیل" />
 
                 <TextInput
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
                     autocomplete="username"
                 />
 
@@ -57,14 +60,13 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="رمز عبور" />
 
                 <TextInput
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-                    required
                     autocomplete="new-password"
                 />
 
@@ -74,7 +76,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="تایید رمز عبور"
                 />
 
                 <TextInput
@@ -82,7 +84,6 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password_confirmation"
-                    required
                     autocomplete="new-password"
                 />
 
@@ -97,7 +98,7 @@ const submit = () => {
                     :href="route('login')"
                     class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    Already registered?
+                    قبلا ثبت نام کرده اید؟
                 </Link>
 
                 <PrimaryButton
@@ -105,7 +106,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    ثبت نام
                 </PrimaryButton>
             </div>
         </form>

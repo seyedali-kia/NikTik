@@ -38,8 +38,13 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit">
+            <h1
+                class="text-xl font-semibold leading-tight text-gray-800 text-center mb-4"
+            >
+                ورود به نیک تیک!
+            </h1>
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="ایمیل" />
 
                 <TextInput
                     id="email"
@@ -55,7 +60,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="رمز عبور" />
 
                 <TextInput
                     id="password"
@@ -73,18 +78,26 @@ const submit = () => {
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
                     <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
+                        >مرا به خاطر بسپار</span
                     >
                 </label>
             </div>
 
             <div class="mt-4 flex items-center justify-end">
                 <Link
+                    :href="route('register')"
+                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+
+                >
+                    کاربر جدید
+                </Link>
+
+                <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  ms-4"
                 >
-                    Forgot your password?
+                    فراموشی رمز عبور؟
                 </Link>
 
                 <PrimaryButton
@@ -92,7 +105,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Log in
+                    ورود
                 </PrimaryButton>
             </div>
         </form>

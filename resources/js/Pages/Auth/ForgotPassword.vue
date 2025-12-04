@@ -25,10 +25,16 @@ const submit = () => {
     <GuestLayout>
         <Head title="Forgot Password" />
 
+        
+        <h1
+            class="text-xl font-semibold leading-tight text-gray-800 text-center mb-4"
+        >
+            فراموشی رمز عبور
+        </h1>
+
         <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
+            رمز عبورتو فراموش کردی؟ اشکالی نداره!
+ایمیلت رو وارد کن تا لینک بازیابی برات بفرستیم و بتونی یه رمز جدید بذاری.
         </div>
 
         <div
@@ -40,7 +46,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="ایمیل" />
 
                 <TextInput
                     id="email"
@@ -60,7 +66,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Email Password Reset Link
+                    ارسال ایمیل بازنشانی رمز
                 </PrimaryButton>
             </div>
         </form>
