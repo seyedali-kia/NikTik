@@ -18,13 +18,13 @@ return new class extends Migration
             // اگر تسک پروژه‌ای باشد -> project_id = id پروژه
             $table->foreignId('project_id')->nullable()->constrained()->onDelete('cascade');
 
-            // یوزری که "مالک / انجام‌دهنده" تسک است:
-            // - برای تسک شخصی: همیشه ست می‌شود
-            // - برای تسک پروژه‌ای: در ابتدا null است، بعد از Done شدن، user_id کسی که انجام داده می‌شود
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            // کی این تسک رو ساخته؟
+            $table->foreignId('created_by_id')->constrained('users');
 
-            // (اختیاری ولی خیلی خوبه): کی این تسک رو ساخته؟
-            $table->foreignId('created_by_id')->constrained('users')->onDelete('cascade');
+            // یوزری که "انجام‌دهنده" تسک است:
+            // همیشه خالی است تا زمانی که کسی آنرا انجام دهد 
+            // شاید برای تسک های شخصی لازم نباشد ولی برای تسک های گروهی قطعا لازم است
+            $table->foreignId('completed_by_id')->nullable()->constrained('users');
 
             $table->string('title');
             $table->text('description')->nullable();

@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class project extends Model
+class Project extends Model
 {
-    protected $fillable = ['owner_id', 'name', 'description', 'deadline', 'status'];
+    protected $fillable = [
+        'owner_id', 'name', 'description', 'deadline', 'status'
+    ];
 
     // سازنده پروژه
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'owner_id')->withTrashed();
     }
 
     // اعضای پروژه
