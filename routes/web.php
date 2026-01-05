@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,12 +21,12 @@ Route::middleware(['auth','verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/tasks', function () {
-        return Inertia::render('Tasks');
-    })->name('tasks');
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks');
     Route::get('/projects', function () {
         return Inertia::render('Projects');
     })->name('projects');
+
+    Route::post('/task', [TaskController::class, 'store'])->name('task.store');
 });
 
 

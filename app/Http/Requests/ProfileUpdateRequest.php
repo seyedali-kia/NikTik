@@ -27,4 +27,21 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'نام الزامی است.',
+            'name.max' => 'نام نباید بیشتر از 255 کاراکتر باشد.',
+            'email.required' => 'ایمیل الزامی است.',
+            'email.email' => 'فرمت ایمیل صحیح نیست.',
+            'email.max' => 'ایمیل نباید بیشتر از 255 کاراکتر باشد.',
+            'email.unique' => 'این ایمیل قبلاً ثبت شده است.',
+        ];
+    }
 }

@@ -17,12 +17,17 @@ class ProjectPolicy
      * @return bool
      */
 
-    public function leave(User $user, Project $project)
+    public function view(User $user, Project $project)
     {
-        return $user->id !== $project->owner_id && $project->users->contains($user);
+        return $project->users()->whereKey($user->id)->exists();
     }
 
-    public function change(User $user, Project $project)
+    public function leave(User $user, Project $project)
+    {
+        return $user->id !== $project->owner_id && $project->users()->whereKey($user->id)->exists();
+    }
+
+    public function update(User $user, Project $project)
     {
         return $user->id === $project->owner_id;
     }

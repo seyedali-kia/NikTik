@@ -29,4 +29,22 @@ class StoreTaskRequest extends FormRequest
             'status' => 'required|in:todo,doing,done',
         ];
     }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'عنوان تسک الزامی است.',
+            'title.max' => 'عنوان تسک نباید بیشتر از 255 کاراکتر باشد.',
+            'estimation.integer' => 'برآورد سختی باید عدد صحیح باشد.',
+            'estimation.min' => 'برآورد سختی باید حداقل 1 باشد.',
+            'status.required' => 'وضعیت تسک الزامی است.',
+            'status.in' => 'وضعیت انتخاب شده معتبر نیست.',
+            'project_id.exists' => 'پروژه انتخاب شده وجود ندارد.',
+        ];
+    }
 }

@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjectRequest;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
-    // فرم ساخت پروژه (اگر از Inertia استفاده می‌کنی، می‌تونی از این هم استفاده کنی)
     public function create()
     {
         return inertia('Projects/Create');
     }
 
-    // ذخیره پروژه جدید
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
+        $data = $request->validated();
 
         $user = $request->user();
-        // ۱) ساخت پروژه
         $project = Project::create([
             'owner_id'    => $user->id,
             'name'        => $data['name'],
