@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, computed } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import Button from '@/Components/UI/button.vue';
 import Task from '@/Components/UI/Task.vue';
@@ -39,7 +39,9 @@ watch(
     { deep: true }
 )
 
-
+const disablereport = computed(() => {
+    return props.tasks.length === 0;
+});
 
 const storeform = useForm({
     title: null,
@@ -156,10 +158,11 @@ const handleDeleteTask = (taskId) => {
     <AuthenticatedLayout dir="rtl">
         <template #header>
             <div class="justify-between flex">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                <h2 class="justify-center flex items-center text-xl font-semibold leading-tight text-gray-800">
                     تسک‌ها
                 </h2>
                 <div class="flex flex-col md:flex-row gap-3 items-start md:items-center">
+                    <Button label="گزارش" @click="router.get(route('task.report'))" :is-disable="disablereport"/>
                     <input v-model="filterForm.search" type="text" placeholder="جستجو در عنوان/توضیحات…"
                         class="p-2 border border-gray-300 rounded w-full md:w-80" />
 

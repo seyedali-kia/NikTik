@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TaskCompleted;
 use App\Http\Requests\FilterTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Jobs\GenerateTaskReport;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -99,8 +101,10 @@ class TaskController extends Controller
     public function markAsCompleted(Request $request, Task $task)
     {
         try {
+            $user = $request->user();
             $this->authorize('markAsCompleted', $task);
-            $this->taskService->completeTask($request->user(), $task);
+            $this->taskService->completeTask($user, $task);
+            event(new TaskCompleted($task, $user));
             return redirect()->back()->with('flash', [
                 'type' => 'success',
                 'message' => 'تسک با موفقیت انجام شد.',
@@ -113,7 +117,7 @@ class TaskController extends Controller
          ]);
             return redirect()->back()->with('flash', [
                 'type' => 'error',
-                'message' => 'خطا در انجام تسک' 
+                'message' => 'خطا در انجام تسک'
             ]);
         }
     }
@@ -184,6 +188,17 @@ class TaskController extends Controller
                 'message' => 'خطا در حذف تسک' 
             ]);
         }
+    }
+
+    public function report(Request $request)
+    {    
+        $user = $request->user();
+        $counts = GenerateTaskReport::dispatchSync($user);
+        dd($counts);
+        return redirect()->back()->with('flash', [
+            'type' => 'success',
+            'message' => 'گزارش تسک‌ها با موفقیت ایجاد شد.',
+        ]);
     }
     
 }

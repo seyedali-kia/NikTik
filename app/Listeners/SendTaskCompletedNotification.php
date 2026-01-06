@@ -3,24 +3,19 @@
 namespace App\Listeners;
 
 use App\Events\TaskCompleted;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\TaskCompletedNotification;
 
 class SendTaskCompletedNotification
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Handle the event.
-     */
     public function handle(TaskCompleted $event): void
     {
-        //
+        $task = $event->task;
+
+        // مثال: به سازنده‌ی تسک اطلاع بده
+        $creator = $task->creator; // باید relationship داشته باشی (پایین توضیح میدم)
+
+        if ($creator) {
+            $creator->notify(new TaskCompletedNotification($task));
+        }
     }
 }

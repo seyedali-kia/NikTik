@@ -27,6 +27,7 @@ Route::middleware(['auth','verified'])->group(function () {
     })->name('projects');
 
     Route::post('/task/store', [TaskController::class, 'store'])->name('task.store');
+    Route::get('/task/report',[TaskController::class, 'report'])->name('task.report');
     Route::post('/task/update/{task}', [TaskController::class, 'update'])->name('task.update');
     Route::post('/task/start/{task}', [TaskController::class, 'markAsStarted'])->name('task.start');
     Route::post('/task/complete/{task}', [TaskController::class, 'markAsCompleted'])->name('task.complete');
