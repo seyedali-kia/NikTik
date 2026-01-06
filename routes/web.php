@@ -26,7 +26,11 @@ Route::middleware(['auth','verified'])->group(function () {
         return Inertia::render('Projects');
     })->name('projects');
 
-    Route::post('/task', [TaskController::class, 'store'])->name('task.store');
+    Route::post('/task/store', [TaskController::class, 'store'])->name('task.store');
+    Route::post('/task/update/{task}', [TaskController::class, 'update'])->name('task.update');
+    Route::post('/task/start/{task}', [TaskController::class, 'markAsStarted'])->name('task.start');
+    Route::post('/task/complete/{task}', [TaskController::class, 'markAsCompleted'])->name('task.complete');
+    Route::delete('/task/delete/{task}', [TaskController::class, 'destroy'])->name('task.delete');
 });
 
 

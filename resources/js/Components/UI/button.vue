@@ -1,6 +1,4 @@
 <script setup>
-import { computed } from 'vue'
-
 // props for isDisable to disable and iconStyle to set the style of the icon button
 const props = defineProps({
     isDisable: {

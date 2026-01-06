@@ -47,8 +47,10 @@ class TaskPolicy
 
     public function markAsCompleted(User $user, Task $task)
     {
-
-        if ($task->project_id === null) {
+        if ($task->completed_by_id !== null) {
+            return $user->id === $task->completed_by_id;
+        }
+        else if ($task->project_id === null) {
             return $user->id === $task->created_by_id;
         }else {
             return $task->project->users()->whereKey($user->id)->exists();
